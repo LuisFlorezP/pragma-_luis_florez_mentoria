@@ -15,7 +15,6 @@ function clientCode(director: Director) {
     director.buildFullHouse();
     stoneBuilder.getHouse().listParts();
 
-    // Custom house
     console.log('Custom wooden house:');
     woodenBuilder.buildWalls();
     woodenBuilder.buildWindows();
