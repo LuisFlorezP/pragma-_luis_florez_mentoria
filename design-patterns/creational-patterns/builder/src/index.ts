@@ -1,22 +1,25 @@
-import { Director, ConcreteBuilder } from './builder';
+import { Director, WoodenHouseBuilder, StoneHouseBuilder } from './builder';
 
 function clientCode(director: Director) {
-    const builder = new ConcreteBuilder();
-    director.setBuilder(builder);
+    const woodenBuilder = new WoodenHouseBuilder();
+    director.setBuilder(woodenBuilder);
 
-    console.log('Standard basic product:');
-    director.buildMinimalViableProduct();
-    builder.getProduct().listParts();
+    console.log('Standard wooden house:');
+    director.buildFullHouse();
+    woodenBuilder.getHouse().listParts();
 
-    console.log('Standard full featured product:');
-    director.buildFullFeaturedProduct();
-    builder.getProduct().listParts();
+    const stoneBuilder = new StoneHouseBuilder();
+    director.setBuilder(stoneBuilder);
 
-    // Custom product
-    console.log('Custom product:');
-    builder.producePartA();
-    builder.producePartC();
-    builder.getProduct().listParts();
+    console.log('Standard stone house:');
+    director.buildFullHouse();
+    stoneBuilder.getHouse().listParts();
+
+    // Custom house
+    console.log('Custom wooden house:');
+    woodenBuilder.buildWalls();
+    woodenBuilder.buildWindows();
+    woodenBuilder.getHouse().listParts();
 }
 
 const director = new Director();

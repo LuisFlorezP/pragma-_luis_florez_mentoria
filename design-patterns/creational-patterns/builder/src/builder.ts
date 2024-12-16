@@ -1,42 +1,72 @@
-class Product {
+class House {
     public parts: string[] = [];
 
     public listParts(): void {
-        console.log(`Product parts: ${this.parts.join(', ')}`);
+        console.log(`House parts: ${this.parts.join(', ')}`);
     }
 }
 
 interface Builder {
-    producePartA(): void;
-    producePartB(): void;
-    producePartC(): void;
+    buildWalls(): void;
+    buildDoors(): void;
+    buildWindows(): void;
 }
 
-class ConcreteBuilder implements Builder {
-    private product: Product;
+class WoodenHouseBuilder implements Builder {
+    private house: House;
 
     constructor() {
-        this.product = new Product();
+        this.house = new House();
     }
 
     public reset(): void {
-        this.product = new Product();
+        this.house = new House();
     }
 
-    public producePartA(): void {
-        this.product.parts.push('PartA');
+    public buildWalls(): void {
+        this.house.parts.push('Wooden Walls');
     }
 
-    public producePartB(): void {
-        this.product.parts.push('PartB');
+    public buildDoors(): void {
+        this.house.parts.push('Wooden Doors');
     }
 
-    public producePartC(): void {
-        this.product.parts.push('PartC');
+    public buildWindows(): void {
+        this.house.parts.push('Wooden Windows');
     }
 
-    public getProduct(): Product {
-        const result = this.product;
+    public getHouse(): House {
+        const result = this.house;
+        this.reset();
+        return result;
+    }
+}
+
+class StoneHouseBuilder implements Builder {
+    private house: House;
+
+    constructor() {
+        this.house = new House();
+    }
+
+    public reset(): void {
+        this.house = new House();
+    }
+
+    public buildWalls(): void {
+        this.house.parts.push('Stone Walls');
+    }
+
+    public buildDoors(): void {
+        this.house.parts.push('Stone Doors');
+    }
+
+    public buildWindows(): void {
+        this.house.parts.push('Stone Windows');
+    }
+
+    public getHouse(): House {
+        const result = this.house;
         this.reset();
         return result;
     }
@@ -49,15 +79,15 @@ class Director {
         this.builder = builder;
     }
 
-    public buildMinimalViableProduct(): void {
-        this.builder.producePartA();
+    public buildMinimalHouse(): void {
+        this.builder.buildWalls();
     }
 
-    public buildFullFeaturedProduct(): void {
-        this.builder.producePartA();
-        this.builder.producePartB();
-        this.builder.producePartC();
+    public buildFullHouse(): void {
+        this.builder.buildWalls();
+        this.builder.buildDoors();
+        this.builder.buildWindows();
     }
 }
 
-export { Director, ConcreteBuilder, Product };
+export { Director, WoodenHouseBuilder, StoneHouseBuilder, House };
