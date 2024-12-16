@@ -1,0 +1,15 @@
+{
+  "name": "builder",
+  "version": "1.0.0",
+  "description": "Ejemplo del patrón de diseño Builder en TypeScript",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "node dist/index.js"
+  },
+  "author": "Luis Angel Florez Palacio",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.0.0"
+  }
+}
