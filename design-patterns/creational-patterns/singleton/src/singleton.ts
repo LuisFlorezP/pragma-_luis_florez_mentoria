@@ -4,16 +4,17 @@ class Singleton {
 
     private constructor() {}
 
-    public static getInstance(): Singleton {
+    private static getInstance(): Singleton {
         return Singleton.instance ?? (Singleton.instance = new Singleton());
     }
 
-    public addData(item: string): void {
-        this.data.push(item);
+    public static addData(item: string): void {
+        const singleton = Singleton.getInstance();
+        singleton.data.push(item);
     }
 
-    public getData(): string[] {
-        return this.data;
+    public static getData(): string[] {
+        return Singleton.getInstance().data;
     }
 }
 

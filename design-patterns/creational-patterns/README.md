@@ -14,6 +14,6 @@ Este directorio contiene implementaciones de patrones de diseño creacionales. L
 
 Cada patrón está implementado en su propio archivo. Puedes explorar cada uno para entender cómo se implementan y cómo pueden ser utilizados en tus propios proyectos.
 
-## Volver a la raíz
+## Volver a los Patrones de Diseño
 
-[Volver a la raíz](../README.md)
+[Volver a Patrones de Diseño](../README.md)

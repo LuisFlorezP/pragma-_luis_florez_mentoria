@@ -14,6 +14,12 @@ class Motorcycle implements Vehicle {
     }
 }
 
+class Helicopter implements Vehicle {
+    public drive(): string {
+        return 'Flyyyy';
+    }
+}
+
 abstract class VehicleFactory {
     public abstract createVehicle(): Vehicle;
 
@@ -35,4 +41,10 @@ class MotorcycleFactory extends VehicleFactory {
     }
 }
 
-export { VehicleFactory, CarFactory, MotorcycleFactory };
+class HelicopterFactory extends VehicleFactory {
+    public createVehicle(): Vehicle {
+        return new Helicopter();
+    }
+}
+
+export { VehicleFactory, CarFactory, MotorcycleFactory, HelicopterFactory };

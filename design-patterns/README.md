@@ -22,3 +22,7 @@ Los patrones de comportamiento se centran en cómo los objetos interactúan y se
 ## Cómo usar
 
 Cada patrón está implementado en su propio archivo dentro de las subcarpetas correspondientes. Puedes explorar cada uno para entender cómo se implementan y cómo pueden ser utilizados en tus propios proyectos.
+
+## Volver a la raíz
+
+[Volver a la raíz](../README.md)
