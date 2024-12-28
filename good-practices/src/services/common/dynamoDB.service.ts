@@ -1,8 +1,8 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, QueryCommand, QueryCommandInput, QueryCommandOutput, ScanCommand, ScanCommandInput, ScanCommandOutput } from '@aws-sdk/lib-dynamodb';
 
-import { Logger, LogType } from './logger.service';
-import { History } from '../utils/interfaces';
+import { Logger, LogType } from '@services/common/logger.service';
+import { History } from '@utils/interfaces';
 
 class DynamoDB {
     private static dynamoDB: DynamoDBDocumentClient;

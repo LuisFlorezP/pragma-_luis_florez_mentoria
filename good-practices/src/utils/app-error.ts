@@ -1,14 +1,24 @@
-class AppError extends Error {
-    public readonly httpCode: number;
+import { ENV } from "@utils/environment";
 
-    constructor(httpCode: number, message: string) {
+interface StatusError {
+    statusCode: number;
+    message: string;
+}
+
+class AppError extends Error {
+    public readonly statusCode: number;
+
+    constructor({ statusCode, message }: StatusError) {
         super(message);
         Object.setPrototypeOf(this, new.target.prototype);
-
-        this.httpCode = httpCode;
-
+        this.statusCode = statusCode;
         Error.captureStackTrace(this);
     }
 }
 
-export { AppError };
+const ErrorHandler = (error: any): AppError => {
+    if (error instanceof AppError) return error;
+    return new AppError(ENV.ERROR_DICTIONARY.SERVER_ERROR);
+};
+
+export { AppError, ErrorHandler };

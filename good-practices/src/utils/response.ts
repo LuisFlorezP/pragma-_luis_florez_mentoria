@@ -1,7 +1,17 @@
 import { STATUS_CODES } from 'http';
 
-import { Logger, LogType } from '../services/logger.service';
-import { LambdaResponse } from './interfaces';
+import { Logger, LogType } from '@services/common/logger.service';
+
+interface LambdaResponse {
+    status: Status;
+    body?: unknown;
+}
+
+interface Status {
+    statusCode: number;
+    message: string;
+    detail: string;
+}
 
 const responseLambda = (statusCode: number, detail: string, body?: unknown): LambdaResponse => {
     const response = {

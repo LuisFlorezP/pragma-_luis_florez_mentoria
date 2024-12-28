@@ -55,20 +55,9 @@ interface TokenPayload {
     sub: string;
 }
 
-interface LambdaResponse {
-    status: Status;
-    body?: unknown;
-}
-
-interface Status {
-    statusCode: number;
-    message: string;
-    detail: string;
-}
-
 interface RangeMonthsUnix {
     registrationDateFrom?: number;
     registrationDateTo?: number;
 }
 
-export { EventType, Headers, Body, History, ExtractionUsers, TokenPayload, LambdaResponse, RangeMonthsUnix };
+export { EventType, Headers, Body, History, ExtractionUsers, TokenPayload, RangeMonthsUnix };
