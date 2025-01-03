@@ -22,7 +22,7 @@ interface Body {
     name?: string;
 }
 
-interface ExtractionUsers {
+interface HistoryResponse {
     cis: string;
     username: string;
     registrationDate: string;
@@ -38,6 +38,7 @@ interface History {
     firstLogin: number;
     name: string;
     email: string;
+    date?: number;
     'last-login-svp': number;
     'last-login-app': number;
     'first-login-svp': number;
@@ -60,4 +61,20 @@ interface RangeMonthsUnix {
     registrationDateTo?: number;
 }
 
-export { EventType, Headers, Body, History, ExtractionUsers, TokenPayload, RangeMonthsUnix };
+interface AditionalDates {
+    registrationDate: string;
+    lastEntryDate: Channels;
+    firstEntryDate: Channels;
+}
+
+interface AditionalParams {
+    filterExpression: string;
+    expressionAttributeValues: object;
+}
+
+interface Channels {
+    svp: string;
+    app: string;
+}
+
+export { EventType, Headers, Body, History, HistoryResponse, TokenPayload, RangeMonthsUnix, AditionalDates, AditionalParams };

@@ -1,10 +1,10 @@
 import { createServer, IncomingMessage, ServerResponse } from 'http';
 
-import { AdminPersonasController } from '@controllers/admin-personas.controller';
+import { LoginHistoryController } from '@controllers/login-history.controller';
 import { DynamoDB } from '@services/common/dynamoDB.service';
 import { EventRequest } from '@services/common/event-request.service';
 import { ValidateRequest } from '@services/common/validate-request.service';
-import { AdminPersonasService } from '@services/admin-personas.service';
+import { LoginHistoryService } from '@services/login-history.service';
 import { Body, EventType } from '@utils/interfaces';
 import { responseLambda } from '@utils/response';
 import { AppError, ErrorHandler } from '@utils/app-error';
@@ -34,8 +34,8 @@ const requestListener = async (req: IncomingMessage, res: ServerResponse) => {
             ValidateRequest.validate(extractionUsers, requestBody);
             const eventRequest = new EventRequest<Body>({ headers: req.headers, body: requestBody } as EventType<Body>);
             const dynamoDB = new DynamoDB();
-            const service = new AdminPersonasService(dynamoDB, eventRequest);
-            const controller = new AdminPersonasController(service);
+            const service = new LoginHistoryService(dynamoDB, eventRequest);
+            const controller = new LoginHistoryController(service);
             const result = await controller.get();
             res.end(JSON.stringify(responseLambda(ENV.HTTP_STATUS_CODE.OK, '', result)));
         } catch (error) {

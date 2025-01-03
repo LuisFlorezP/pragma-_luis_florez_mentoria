@@ -22,7 +22,7 @@ class DynamoDB {
         return [];
     }
 
-    public scanDataAdminPersonas = async (traceID: string, params: QueryCommandInput): Promise<History[]> => {
+    public scanLoginHistory = async (traceID: string, params: ScanCommandInput): Promise<History[]> => {
         Logger.log(LogType.INFO, `scanDataAdminPersonas - ${traceID}`, 'Params to scan', { params });
         // return ((await this.scan(params)).Items as History[]);
 

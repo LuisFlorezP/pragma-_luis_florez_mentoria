@@ -1,17 +1,17 @@
-import { AdminPersonasService } from '@services/admin-personas.service';
+import { LoginHistoryService } from '@services/login-history.service';
 import { Logger, LogType } from '@services/common/logger.service';
 import { AppError, ErrorHandler } from '@utils/app-error';
-import { ExtractionUsers } from '@utils/interfaces';
+import { HistoryResponse } from '@utils/interfaces';
 
-class AdminPersonasController {
+class LoginHistoryController {
     constructor(
-        private service: AdminPersonasService,
+        private service: LoginHistoryService,
     ) {}
 
-    public async get(): Promise<ExtractionUsers[]> {
+    public async get(): Promise<HistoryResponse[]> {
         try {
             Logger.log(LogType.INFO, 'Get extraction users');
-            const response = await this.service.getExtractionUsers();
+            const response = await this.service.get();
             Logger.log(LogType.INFO, 'Extraction users retrieved', '', { response });
             return response;
         } catch (error) {
@@ -22,4 +22,4 @@ class AdminPersonasController {
     }
 }
 
-export { AdminPersonasController };
+export { LoginHistoryController };
