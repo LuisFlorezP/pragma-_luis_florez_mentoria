@@ -12,16 +12,7 @@ class LoginHistoryService {
         private eventRequest: EventRequest<Body>,
     ) { }
 
-    public get = async (): Promise<HistoryResponse[]> => {
-        const body = this.eventRequest.getBody();
-        const traceID = String(this.eventRequest.getHeaders()[ENV.HEADERS.traceID]).split("1-")[1];
-
-        if (!body.registrationDate && body.lastEntryDate) return await this.getLastLoginHistory(traceID, body.name);
-
-        return await this.getLoginHistory(traceID, body);
-    };
-
-    private getLastLoginHistory = async (traceID: string, name?: string): Promise<HistoryResponse[]> => {
+    public getLastLoginHistory = async (traceID: string, name?: string): Promise<HistoryResponse[]> => {
         const params = {
             IndexName: ENV.TABLES.HISTORY_DETAIL.SECUNDARY_INDEX,
             TableName: ENV.TABLES.HISTORY_DETAIL.NAME,
@@ -54,7 +45,7 @@ class LoginHistoryService {
         return this.formatHistoryResponse(traceID, response);
     };
 
-    private getLoginHistory = async (traceID: string, body: Body): Promise<HistoryResponse[]> => {
+    public getLoginHistory = async (traceID: string, body: Body): Promise<HistoryResponse[]> => {
         const { filterExpression, expressionAttributeValues } = this.getAditionalParams(traceID, body);
         const params = {
             TableName: ENV.TABLES.HISTORY_DETAIL.NAME,

@@ -1,24 +1,21 @@
 import { LoginHistoryService } from '@services/login-history.service';
-import { Logger, LogType } from '@services/common/logger.service';
-import { AppError, ErrorHandler } from '@utils/app-error';
-import { HistoryResponse } from '@utils/interfaces';
+import { EventRequest } from '@services/common/event-request.service';
+import { Body, HistoryResponse } from '@utils/interfaces';
+import { ENV } from '@utils/environment';
 
 class LoginHistoryController {
     constructor(
         private service: LoginHistoryService,
-    ) {}
+        private eventRequest: EventRequest<Body>,
+    ) { }
 
     public async get(): Promise<HistoryResponse[]> {
-        try {
-            Logger.log(LogType.INFO, 'Get extraction users');
-            const response = await this.service.get();
-            Logger.log(LogType.INFO, 'Extraction users retrieved', '', { response });
-            return response;
-        } catch (error) {
-            Logger.log(LogType.ERROR, 'ERROR', 'Error in getAdminPersonas', { error });
-            const { statusCode, message } = ErrorHandler(error);
-            throw new AppError({statusCode, message});
-        }
+        const body = this.eventRequest.getBody();
+        const traceID = String(this.eventRequest.getHeaders()[ENV.HEADERS.traceID]).split("1-")[1];
+        
+        if (!body.registrationDate && body.lastEntryDate) return await this.service.getLastLoginHistory(traceID, body.name);
+
+        return await this.service.getLoginHistory(traceID, body);
     }
 }
 
