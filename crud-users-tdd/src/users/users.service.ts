@@ -1,61 +1,64 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from './models/user.model';
+import { UserEntity } from './entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PartialUpdateUserDto } from './dto/partial-update-user.dto';
 
 @Injectable()
 export class UsersService {
-    private readonly users: User[] = [];
-    private currentId = 1;
+    constructor(
+        @InjectRepository(UserEntity)
+        private usersRepository: Repository<UserEntity>,
+    ) {}
 
     /**
      * Create a new user.
      * @param {CreateUserDto} createUserDto - Data transfer object containing user creation data.
-     * @returns {string} A message indicating the user has been successfully created.
+     * @returns {Promise<string>} A message indicating the user has been successfully created.
      */
-    create(createUserDto: CreateUserDto): string {
-        const { name, age, email } = createUserDto;
-        const id = this.currentId++;
-        this.users.push(new User(id, name, age, email));
+    async create(createUserDto: CreateUserDto): Promise<string> {
+        await this.usersRepository.save(createUserDto);
         return `User ${createUserDto.name} created successfully`;
     }
 
     /**
      * Get all users.
-     * @returns {User[]} An array of all users.
+     * @returns {Promise<User[]>} An array of all users.
      */
-    findAll(): User[] {
-        return this.users;
+    async findAll(): Promise<User[]> {
+        const users = await this.usersRepository.find();
+        return users.map(user => this.mapEntityToModel(user));
     }
 
     /**
      * Get a user by ID.
      * @param {number} id - The ID of the user to retrieve.
-     * @returns {User} The user with the specified ID.
+     * @returns {Promise<User>} The user with the specified ID.
      * @throws {NotFoundException} If the user with the specified ID is not found.
      */
-    findOne(id: number): User {
-        const user = this.users.find(user => user.id === id);
+    async findOne(id: number): Promise<User> {
+        const user = await this.usersRepository.findOne({ where: { id } });
         if (!user) {
             throw new NotFoundException('User not found');
         }
-        return user;
+        return this.mapEntityToModel(user);
     }
 
     /**
      * Partially updates a user's information.
      * @param {number} id - The ID of the user to update.
      * @param {PartialUpdateUserDto} partialUpdateUserDto - The data to update the user with.
-     * @returns {string} A message indicating the user was updated successfully.
+     * @returns {Promise<string>} A message indicating the user has been successfully updated.
      * @throws {NotFoundException} If the user with the specified ID is not found.
      */
-    partialUpdate(id: number, partialUpdateUserDto: PartialUpdateUserDto): string {
-        const userIndex = this.users.findIndex(user => user.id === id);
-        if (userIndex === -1) {
+    async partialUpdate(id: number, partialUpdateUserDto: PartialUpdateUserDto): Promise<string> {
+        const result = await this.usersRepository.update(id, partialUpdateUserDto);
+        if (result.affected === 0) {
             throw new NotFoundException('User not found');
         }
-        this.users[userIndex] = { ...this.users[userIndex], ...partialUpdateUserDto };
         return 'User updated successfully';
     }
 
@@ -63,27 +66,33 @@ export class UsersService {
      * Update a user.
      * @param {number} id - The ID of the user to update.
      * @param {UpdateUserDto} updateUserDto - Data transfer object containing user update data.
-     * @returns {User} The updated user.
+     * @returns {Promise<string>} A message indicating the user has been successfully updated.
      * @throws {NotFoundException} If the user with the specified ID is not found.
      */
-    update(id: number, updateUserDto: UpdateUserDto): string {
-        const userIndex = this.users.findIndex(user => user.id === id);
-        if (userIndex === -1) {
+    async update(id: number, updateUserDto: UpdateUserDto): Promise<string> {
+        const result = await this.usersRepository.update(id, updateUserDto);
+        if (result.affected === 0) {
             throw new NotFoundException('User not found');
         }
-        this.users[userIndex] = { ...this.users[userIndex], ...updateUserDto };
         return 'User updated successfully';
     }
 
     /**
      * Remove a user by ID.
      * @param {number} id - The ID of the user to remove.
-     * @returns {string} A message indicating the user has been successfully deleted.
+     * @returns {Promise<string>} A message indicating the user has been successfully deleted.
      * @throws {NotFoundException} If the user with the specified ID is not found.
      */
-    remove(id: number): string {
-        const user = this.findOne(id);
-        this.users.splice(this.users.indexOf(user), 1);
-        return `User ${user.name} deleted successfully`;
+    async remove(id: number): Promise<string> {
+        const result = await this.usersRepository.delete(id);
+        if (result.affected === 0) {
+            throw new NotFoundException(`Usuario con ID ${id} no encontrado`);
+        }
+        return `User deleted successfully`;
+    }
+
+    private mapEntityToModel(entity: UserEntity): User {
+        const user = new User(entity.id, entity.name, entity.age, entity.email);
+        return user;
     }
 }

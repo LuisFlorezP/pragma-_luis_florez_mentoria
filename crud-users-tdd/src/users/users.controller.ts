@@ -20,7 +20,7 @@ export class UsersController {
     @ApiOperation({ summary: 'Create user' })
     @ApiResponse({ status: 201, description: 'The user has been successfully created.' })
     @ApiResponse({ status: 400, description: 'Bad Request.' })
-    create(@Body() createUserDto: CreateUserDto): string {
+    async create(@Body() createUserDto: CreateUserDto): Promise<string> {
         return this.usersService.create(createUserDto);
     }
 
@@ -31,7 +31,7 @@ export class UsersController {
     @Get()
     @ApiOperation({ summary: 'Get all users' })
     @ApiResponse({ status: 200, description: 'Return all users.' })
-    findAll(): User[] {        
+    async findAll(): Promise<User[]> {        
         return this.usersService.findAll();
     }
 
@@ -44,7 +44,7 @@ export class UsersController {
     @ApiOperation({ summary: 'Get user by ID' })
     @ApiResponse({ status: 200, description: 'Return the user with the specified ID.' })
     @ApiResponse({ status: 404, description: 'User not found.' })
-    findOne(@Param('id') id: number): User {
+    async findOne(@Param('id') id: number): Promise<User> {
         return this.usersService.findOne(+id);
     }
 
@@ -58,7 +58,7 @@ export class UsersController {
     @ApiOperation({ summary: 'Partially update user' })
     @ApiResponse({ status: 200, description: 'The user has been successfully updated.' })
     @ApiResponse({ status: 404, description: 'User not found.' })
-    partialUpdate(@Param('id') id: number, @Body() partialUpdateUserDto: PartialUpdateUserDto): string {        
+    async partialUpdate(@Param('id') id: number, @Body() partialUpdateUserDto: PartialUpdateUserDto): Promise<string> {        
         return this.usersService.partialUpdate(+id, partialUpdateUserDto);
     }
     
@@ -72,7 +72,7 @@ export class UsersController {
     @ApiOperation({ summary: 'Update user' })
     @ApiResponse({ status: 200, description: 'The user has been successfully updated.' })
     @ApiResponse({ status: 404, description: 'User not found.' })
-    update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto): string {
+    async update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto): Promise<string> {
         return this.usersService.update(+id, updateUserDto);
     }
 
@@ -85,7 +85,7 @@ export class UsersController {
     @ApiOperation({ summary: 'Delete user' })
     @ApiResponse({ status: 200, description: 'The user has been successfully deleted.' })
     @ApiResponse({ status: 404, description: 'User not found.' })
-    remove(@Param('id') id: number): string {
+    async remove(@Param('id') id: number): Promise<string> {
         return this.usersService.remove(+id);
     }
 }
