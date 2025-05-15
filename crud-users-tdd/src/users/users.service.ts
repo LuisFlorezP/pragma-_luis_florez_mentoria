@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { User } from './models/user.model';
 import { UserEntity } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,6 +9,8 @@ import { PartialUpdateUserDto } from './dto/partial-update-user.dto';
 
 @Injectable()
 export class UsersService {
+    private readonly logger = new Logger(UsersService.name);
+
     constructor(
         @InjectRepository(UserEntity)
         private usersRepository: Repository<UserEntity>,
@@ -29,8 +31,15 @@ export class UsersService {
      * @returns {Promise<User[]>} An array of all users.
      */
     async findAll(): Promise<User[]> {
-        const users = await this.usersRepository.find();
-        return users.map(user => this.mapEntityToModel(user));
+        this.logger.log('Buscando todos los usuarios');
+        try {
+            const users = await this.usersRepository.find();
+            this.logger.debug(`Se encontraron ${users.length} usuarios`);
+            return users.map(user => this.mapEntityToModel(user));
+        } catch (error) {
+            this.logger.error(`Error al buscar usuarios: ${error.message}`, error.stack);
+            throw error;
+        }
     }
 
     /**
@@ -40,6 +49,7 @@ export class UsersService {
      * @throws {NotFoundException} If the user with the specified ID is not found.
      */
     async findOne(id: number): Promise<User> {
+        this.logger.log(`Buscando usuario con ID: ${id}`);
         const user = await this.usersRepository.findOne({ where: { id } });
         if (!user) {
             throw new NotFoundException('User not found');

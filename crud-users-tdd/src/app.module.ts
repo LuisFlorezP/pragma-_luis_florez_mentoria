@@ -4,18 +4,28 @@ import { UsersModule } from './users/users.module';
 import { AuthMiddleware } from './common/middlewares/auth.middleware';
 import databaseConfig from './config/database.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { LoggerModule } from './common/logger/logger.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [databaseConfig],
     }),
     TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => configService.get('database'),
+      useFactory: databaseConfig,
     }),
+    LoggerModule,
     UsersModule,
+  ],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
   ],
 })
 export class AppModule implements NestModule {
