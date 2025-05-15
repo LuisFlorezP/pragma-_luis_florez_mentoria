@@ -1,4 +1,4 @@
-# Design Patterns
+# Patrones de Diseño
 
 Este directorio contiene implementaciones de varios patrones de diseño en Node.js y TypeScript. Los patrones de diseño son soluciones típicas a problemas comunes en el diseño de software. Estos patrones se dividen en tres categorías principales: creacionales, estructurales y de comportamiento.
 
